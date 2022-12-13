@@ -5,12 +5,12 @@ import shutil
 
 if __name__ == "__main__":
 
-    choix = input('Voulez vous trier et imprimer (1) ou trier et placer dans fichier dédié(2) ? afficher aide(3)')
+    choix = input('Voulez vous trier et imprimer (1) ou trier et placer dans fichier dédié(2) ? afficher aide(3) : ')
 
-    if choix == "" :
+    if choix == "":
         raise ValueError("aucune informations fournies")
 
-    if choix == 1:
+    if choix == "1":
 
         chemin = input('Entrez le chemin absolu du dossier à trier :  ')
 
@@ -26,7 +26,7 @@ if __name__ == "__main__":
         for i in fichiers_tries:
             print(i)
 
-    elif choix == 2:
+    elif choix == "2":
 
         chemin = input('Entrez le chemin absolu vers le dossier ou aide si besoin d aide :  ')
 
@@ -57,9 +57,9 @@ if __name__ == "__main__":
                 os.makedirs(chemin + '/' + extension)
                 shutil.move(chemin + '/' + i, chemin + '/' + extension + '/' + i)
 
-    elif choix == 3 :
+    elif choix == "3":
 
-        print("1 permet d'imprimer tous les fichiers par ordre alphabétique basé sur l'extension du fichier"
-              "2 permet de trier les fichier et les diviser dans des dossiers créés si inexistant ou injecter"
-              "si déja existant, les dossiers auront comme nomination l'extension des fichiers"
+        print("1 permet d'imprimer tous les fichiers par ordre alphabétique basé sur l'extension du fichier \n"
+              "2 permet de trier les fichier et les diviser dans des dossiers créés si inexistant ou injecter \n"
+              "si déja existant, les dossiers auront comme nomination l'extension des fichiers\n"
               "3 vous affichera un message d'aide si vous en avez besoin")
