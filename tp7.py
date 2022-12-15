@@ -72,7 +72,7 @@ class Fraction:
         POST : return la forme silpmifiee au max de la fraction
         """
         if self._numerator == 0:
-            print(0)
+            return str(0)
         else:
             d = self.trouver_pgcd(self._numerator, self._denominator)
 
@@ -80,10 +80,11 @@ class Fraction:
             self._denominator = self._denominator // d
 
             if self._denominator == 1:
-                print(str(self._numerator))
+                return(str(self._numerator))
 
             elif self._denominator != 1:
-                print(str(self._numerator) + "/" + str(self._denominator))
+                return(str(self._numerator) + "/" + str(self._denominator))
+
 
     def as_mixed_number(self):
         """Return a textual representation of the reduced form of the fraction as a mixed number
@@ -94,7 +95,7 @@ class Fraction:
         POST : return la valeur simplifie de la fraction sous forme d'un entier et du reste sous forme de fraction
         """
         if self._numerator == 0:
-            print(0)
+            print (0)
         else:
             d = self.trouver_pgcd(self._numerator, self._denominator)
 
@@ -118,6 +119,8 @@ class Fraction:
             elif self.compteur != 0 and self._denominator != 1 and self._numerator < 0:
                 print("-" + str(self.compteur) + " " + str(self.interim) + "/" + str(self._denominator))
 
+        return self._numerator / self._denominator
+
     # ------------------ Operators overloading ------------------
 
     def __add__(self, other):
@@ -132,8 +135,15 @@ class Fraction:
             raise ValueError("valeur trop extrême")
         elif self._denominator == -math.inf or self._numerator == -math.inf:
             raise ValueError("valeur trop extrême")
-        self.fr = self.fr + other
-        print(self.fr)
+
+        self._numerator = (self._numerator * other._denominator) + (self._denominator * other._numerator)
+        self._denominator = self._denominator * other._denominator
+        d = self.trouver_pgcd(self._numerator, self._denominator)
+        self._numerator = self._numerator // d
+        self._denominator = self._denominator // d
+        self.fr = self._numerator / self._denominator
+        return self.fr
+
 
     def __sub__(self, other):
         """Overloading of the - operator for fractions
@@ -147,8 +157,14 @@ class Fraction:
             raise ValueError("valeur trop extrême")
         elif self._denominator == -math.inf or self._numerator == -math.inf:
             raise ValueError("valeur trop extrême")
-        self.fr = self.fr - other
-        print(self.fr)
+
+        self._numerator = (self._numerator * other._denominator) - (self._denominator * other._numerator)
+        self._denominator = self._denominator * other._denominator
+        d = self.trouver_pgcd(self._numerator, self._denominator)
+        self._numerator = self._numerator // d
+        self._denominator = self._denominator // d
+        self.fr = self._numerator / self._denominator
+        return self.fr
 
     def __mul__(self, other):
         """Overloading of the * operator for fractions
@@ -162,8 +178,14 @@ class Fraction:
             raise ValueError("valeur trop extrême")
         elif self._denominator == -math.inf or self._numerator == -math.inf:
             raise ValueError("valeur trop extrême")
-        self.fr = self.fr * other
-        print(self.fr)
+
+        self._numerator = self._numerator * other._numerator
+        self._denominator = self._denominator * other._denominator
+        d = self.trouver_pgcd(self._numerator, self._denominator)
+        self._numerator = self._numerator // d
+        self._denominator = self._denominator // d
+        self.fr = self._numerator / self._denominator
+        return self.fr
 
     def __truediv__(self, other):
         """Overloading of the / operator for fractions
@@ -180,11 +202,15 @@ class Fraction:
         elif self._denominator == -math.inf or self._numerator == -math.inf:
             raise ValueError("valeur trop extrême")
         try:
-            self.fr = self.fr / other
+            self._numerator = self._numerator * other._denominator
+            self._denominator = self._denominator * other._numerator
+            d = self.trouver_pgcd(self._numerator, self._denominator)
+            self._numerator = self._numerator // d
+            self._denominator = self._denominator // d
+            self.fr = self._numerator / self._denominator
+            return self.fr
         except ZeroDivisionError:
             print("on ne divise pas par 0")
-        else:
-            print(self.fr)
 
     def __pow__(self, other):
         """Overloading of the ** operator for fractions
@@ -198,8 +224,14 @@ class Fraction:
             raise ValueError("valeur trop extrême")
         elif self._denominator == -math.inf or self._numerator == -math.inf:
             raise ValueError("valeur trop extrême")
-        self.fr = self.fr ** other
-        print(self.fr)
+
+        self._numerator = self._numerator ** (other._numerator / other._denominator)
+        self._denominator = self._denominator ** (other._numerator / other._denominator)
+        d = self.trouver_pgcd(self._numerator, self._denominator)
+        self._numerator = self._numerator // d
+        self._denominator = self._denominator // d
+        self.fr = self._numerator / self._denominator
+        return self.fr
 
     def __eq__(self, other):
         """Overloading of the == operator for fractions
@@ -212,10 +244,15 @@ class Fraction:
         """
         if other == 0 or self.fr == 0:
             raise ValueError("valeur impossible transmise")
-        if self.fr == other:
+
+        d = self.trouver_pgcd(self._numerator, self._denominator)
+        self._numerator = self._numerator // d
+        self._denominator = self._denominator // d
+        e = self.trouver_pgcd(other._numerator, other._denominator)
+        other._numerator = other._numerator // e
+        other._denominator = other._denominator // e
+        if self._numerator == other._numerator and self._denominator == other._denominator:
             print("c'est egal")
-        elif self.fr == 0:
-            print("not possible")
         else:
             print("pas egal")
 
@@ -229,9 +266,11 @@ class Fraction:
         if self.fr > 0:
             self.interim_float = self.fr - floor(self.fr)
             print(self.interim_float)
+            return self.interim_float
         elif self.fr < 0:
             self.interim_float = self.fr + round(self.fr)
             print(self.interim_float)
+            return self.interim_float
 
     # TODO : [BONUS] You can overload other operators if you wish (ex : <, >, ...)
 
@@ -255,6 +294,7 @@ class Fraction:
         POST : return true si la valeur teste est un int, false si c'est un float
         RAISE : ValueError si la fraction est egal a 0
         """
+        self.fr = self._numerator / self._denominator
         if isinstance(self.fr, int):
             print("int")
         else:
@@ -296,11 +336,12 @@ class Fraction:
         POST : return true si condition remplie, false dans le cas contraire
         RAISE : ValueError si other est egal a 0 ou si la fraction recue egale 0
         """
-        if other == 0 or self.fr == 0:
+        if other._denominator == 0:
             raise ValueError("valeur impossible transmise")
+        self.fr = self._numerator / self._denominator
         for i in range(1000):
             i = + 1
-            if (abs(self.fr) - abs(other)) == 1 / i:
+            if (abs(self.fr) - abs((other._numerator / other._denominator))) == 1 / i:
                 print("adj")
 
     @numerator.setter
@@ -314,37 +355,37 @@ class Fraction:
 
 if __name__ == "__main__":
     a = Fraction(8, -4)
-    a.__str__()
+    print(a)
     a.as_mixed_number()
     b = Fraction(2, 6)
-    b.__str__()
+    print(b)
     b.as_mixed_number()
     c = Fraction(-27, 4)
-    c.__str__()
+    print(c)
     c.as_mixed_number()
     d = Fraction(0, 4)
-    d.__str__()
+    print(d)
     d.as_mixed_number()
     print()
-    a.__add__(4/5)
-    b.__add__(-4/5)
-    c.__add__(-4/5)
-    d.__add__(4/5)
+    a + b
+    d + c
+    print(a)
+    a - b
     print()
-    a.__sub__(8/7)
-    b.__sub__(-8/7)
-    c.__sub__(8/7)
-    d.__sub__(8/7)
+    a - b
+    b - c
+    c - d
+    d - a
     print()
-    a.__mul__(3/8)
-    b.__mul__(0)
-    c.__mul__(-6)
-    d.__mul__(2)
+    a * b
+    b * c
+    c * d
+    d * a
     print()
-    a.__truediv__(7)
-    b.__truediv__(3/6)
-    c.__truediv__(0)
-    d.__truediv__(-3)
+    #a / b
+    #b / c
+    c / d
+    d / a
     print()
     a.__float__()
     b.__float__()
