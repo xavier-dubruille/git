@@ -17,8 +17,12 @@ class Joueur:
 
     def placement_flotte(self):
         """PRE : deux inputs(chiffre entre 0 et 9) pour déterminer emplacement du bateau et un input pour sens bateau
+
            Si des mauvaises coordonnées sont introduites(hors map ou bateaux déja présent), recommence les inputs
            POST : ajoute un bateau dans le tableau flotte et affiche en console la position du bateau
+           Affiche le retour de Ocean à savoir la grille des joueurs si l'appel a réussi.
+           Permet le placement des bateaux si les méthodes de placement renvoient TRUE
+           Si un problème de positionnement survient, l'utilisateur doit réencoder ses données.
            RAISE : ValueError si aucune données n'est introduite"""
 
         print("Choisissez une coordonnées entre 0 et 9 pour atribuer une ligne et une colonne à votre bateau ")
@@ -100,6 +104,7 @@ class Joueur:
         """PRE : l'id de la personne à cibler(l'ordinateur(o) ou j1, j2) puis deux inputs(chiffre entre 0 et 9) pour
            déterminer case à cibler. Si coordonnées déja ciblées ou inexistantes, répete le tir.
            POST : si un bateau adverse est touché, change la valeur de la case du tableau de tableau en X, O si raté
+           Permet le tir si les méthodes de vérification renvoient TRUE.
            Raise : ValueError si aucune donnée n'est introduite"""
 
         self.apercu_ocean()
