@@ -36,8 +36,18 @@ class Joueur:
                     print("Veuillez placer votre %s" % (bateau))
                     ligne = int(input("Choisissez une ligne -----> "))
                     col = int(input("Choisissez une colonne -----> "))
+
+                    while not 0 <= ligne <= 9 or not 0 <= col <= 9:
+                        input("entrer des coordonnées valides")
+                        ligne = int(input("Choisissez une ligne -----> "))
+                        col = int(input("Choisissez une colonne -----> "))
+
                     orientation = str(
                         input("Verical ou horizontal (tapez v pour vertical ou h pour horizontal -----> "))
+                    while orientation not in ["v", "V", "h", "H"]:
+                        input("entrer une orientation valide")
+                        orientation = str(
+                            input("Verical ou horizontal (tapez v pour vertical ou h pour horizontal -----> "))
 
                     if orientation in ["v", "V"]:
                         if self.grille.placement_valide_ligne(ligne, col, taille):
@@ -47,7 +57,8 @@ class Joueur:
                             self.flotte.append(bateau)
                             drapeau = False
                         else:
-                            input("Deux bateaux ne peuvent pas occuper la même case, réessayez!")
+                            input("Deux bateaux ne peuvent pas occuper "
+                                  "la même case ou dépasser de la grille, réessayez!")
 
                     elif orientation in ["h", "H"]:
                         if self.grille.placement_valide_col(ligne, col, taille):
@@ -57,7 +68,8 @@ class Joueur:
                             self.flotte.append(bateau)
                             drapeau = False
                         else:
-                            input("Deux bateaux ne peuvent pas occuper la même case, réessayez!")
+                            input("Deux bateaux ne peuvent pas occuper la même case"
+                                  "ou dépasser de la grille, réessayez!")
 
                     else:
                         continue
@@ -112,6 +124,11 @@ class Joueur:
             print("\n%s Entrez les coordonnées à cibler..." % (self.nom))
             ligne = int(input("Choisissez une ligne -----> "))
             col = int(input("Choisissez une colonne -----> "))
+
+            while not 0 <= ligne <= 9 or not 0 <= col <= 9:
+                input("entrer des coordonnées valides")
+                ligne = int(input("Choisissez une ligne -----> "))
+                col = int(input("Choisissez une colonne -----> "))
 
             if self.grille.verif_ligne(ligne) and self.grille.verif_col(col):
                 if cible.grille[ligne, col] == "B":
