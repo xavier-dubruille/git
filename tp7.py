@@ -1,6 +1,8 @@
 """python -m pydoc Fraction"""
 import math
+# pk import builtins ?!
 from builtins import print, property, str, range, ValueError, isinstance, float, TypeError, int, abs
+# déjà import math
 from math import gcd, floor
 
 
@@ -8,6 +10,7 @@ class Fraction:
     """Class representing a fraction and operations on it
 
     Author : V. Van den Schrieck
+    # tu peux dire que c'est adapté d'un code de vvds, mais tu ne peux pas laisser comme author
     Date : November 2020
     This class allows fraction manipulations through several operations.
     """
@@ -15,7 +18,9 @@ class Fraction:
     def __init__(self, num=0, den=1):
         """This builds a fraction based on some numerator and denominator.
 
+        # si tu le met dans le raises, ca ne peut pas se retrouver dans le PRE (car si c'est dans le raises, tu concois que ca peux arriver)
         PRE : num doit etre un entier et den doit etre un entier non null 0
+        # post: tu as surtt un object qui est créé ...  
         POST : num et den sont initialises et peuvent etre utilises. Si le den est négatif,
         renvoie sa forme absolu et transforme le num en négatif.
         RAISES : renvoie code error ZeroDivisionError si den = 0
@@ -23,6 +28,7 @@ class Fraction:
                                     TypeError si num ou den ne sont pas des entiers
         """
         self.pgcd = None
+        # nom de variable pas évident à deviner (ni le type) ... si pas de manière evidente alors commentaire
         self.fr = None
         self.compteur = 0
         self.interim = 0
@@ -39,7 +45,10 @@ class Fraction:
             raise TypeError("den n'est pas un entier")
         if isinstance(self._numerator, float):
             raise TypeError("num n'est pas un entier")
+        # dans ces raises, il y a moyen de simplifier des trucs (mais pas très important) par contre, 
+        # tu ne testes que le float ? (donc tu n'es pas raccord avec ce que tu dis dans to raises)  ==> pk pas tester si c'est un integer ?
         self.fr = self._numerator / self._denominator
+        # et si le numérateur ET le dénominateur sont négatif ??!
         if self._denominator < 0:
             self._denominator = abs(self._denominator)
             self._numerator = -abs(self._numerator)
@@ -53,7 +62,9 @@ class Fraction:
         return self._denominator
 
     # ------------------ Textual representations ------------------
+    # les _ devant une variable est une convention pour les variables privées, pas pour les paramètres
     def trouver_pgcd(self, _numerator, _denominator):
+        # pk tester un truc qui a déja été testé ?!  (en plus, tu n'as pas pas spécifié de RAISES )
         if self._denominator == 0:
             raise ValueError("le denominateur ne peut etre egal a 0")
         if self._numerator > self._denominator:
@@ -72,7 +83,7 @@ class Fraction:
         POST : return la forme silpmifiee au max de la fraction
         """
         if self._numerator == 0:
-            return str(0)
+            return str(0) # pk pas "0" ?
         else:
             d = self.trouver_pgcd(self._numerator, self._denominator)
 
@@ -103,6 +114,7 @@ class Fraction:
             self._denominator = self._denominator // d
             self.interim = abs(self._numerator)
 
+            # note: tes 'str()' sont souvant inutile et l'utilisation des f-strings rendra ton code plus digeste
             while self.interim > self._denominator:
                 self.interim = self.interim - self._denominator
                 self.compteur += 1
@@ -119,6 +131,7 @@ class Fraction:
             elif self.compteur != 0 and self._denominator != 1 and self._numerator < 0:
                 print("-" + str(self.compteur) + " " + str(self.interim) + "/" + str(self._denominator))
 
+        # tu fait des print et renvoie un float ... probablement pas ce que tu veux ... (et pas ce qui est spécifié dans tes pré-post)
         return self._numerator / self._denominator
 
     # ------------------ Operators overloading ------------------
@@ -126,10 +139,11 @@ class Fraction:
     def __add__(self, other):
         """Overloading of the + operator for fractions
 
-         PRE : other n'est pas un string
-         POST : return la somme entre la fraction et other
-         RAISE : TypeError si other est different de int et float
+         PRE : other n'est pas un string ==> et il doit même etre du type Fraction !
+         POST : return la somme entre la fraction et other ==> ok, mais sous quelle forme (float ? Fraction ?)
+         RAISE : TypeError si other est different de int et float ==> ce n'est pas ce que ton code fait ;)
          RAISE : ValueError si other est egal a +- infinity
+        
          """
         if self._denominator == math.inf or self._numerator == math.inf:
             raise ValueError("valeur trop extrême")
@@ -144,11 +158,11 @@ class Fraction:
         self.fr = self._numerator / self._denominator
         return self.fr
 
-
+# ===> idem pour tes autres méthodes ==> faut bien comprendre le but de ces méthodes, qd elles sont utilisées et ce qu'elles doivent renvoyer
     def __sub__(self, other):
         """Overloading of the - operator for fractions
 
-        PRE : other n'est pas un string
+        PRE : other n'est pas un string 
         POST : return la diff entre la fraction et other
         RAISE : TypeError si other est different de int et float
         RAISE : ValueError si other est egal a +- infinity
